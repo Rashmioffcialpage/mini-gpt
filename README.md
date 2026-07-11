@@ -38,6 +38,61 @@ python train.py
 python sample.py
 ```
 
+## Results
+
+Full training run (5000 steps, 10.80M params, on Apple Silicon MPS, ~3 hours):
+
+| step | train loss | val loss |
+| ---- | ---------- | -------- |
+| 0    | 4.2695     | 4.2675   |
+| 500  | 2.0898     | 2.1600   |
+| 1000 | 1.5587     | 1.7383   |
+| 1500 | 1.3681     | 1.5857   |
+| 2000 | 1.2587     | 1.5064   |
+| 2500 | 1.1909     | 1.4708   |
+| 3000 | 1.1342     | 1.4620   |
+| 3500 | 1.0835     | 1.4503   |
+| 4000 | 1.0251     | 1.4692   |
+| 4500 | 0.9735     | 1.4790   |
+| 4999 | 0.9188     | 1.4970   |
+
+Val loss bottoms out around step 3500 (1.4503) and creeps back up while train
+loss keeps falling — the model starts mildly overfitting past that point.
+A checkpoint saved around step 3000-3500 generalizes best.
+
+Sample output (`python sample.py`, prompt `"ROMEO:"`, temperature 0.8):
+
+```text
+ROMEO:
+Nay, my lord, what says there?
+
+POMPEY:
+Truly, sir, good father.
+
+MENENIUS:
+I do beseech you, sir. Hear me to my wife:
+Here comes the winds of the clouds of Bolingbroke,
+And seeing it strength in secret post:
+I'll try him for the good city and thee.
+
+CORIOLANUS:
+I shall not be too much of mine hair, not thy nose
+Than my man's mouth: my general tomb!
+
+Volsce:
+What, shall I say?
+
+Roman:
+There is a man I was a tender than a mind
+of the state?
+
+VOLUMNIA:
+Why, if it be not so, you have a wife, I say
+```
+
+Correct play-script formatting (character names, dialogue structure) emerges
+purely from character-level next-token prediction — no rules were hardcoded.
+
 ## Why build this
 
 Understanding a transformer means being able to write the attention math,
